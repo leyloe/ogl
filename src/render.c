@@ -26,3 +26,19 @@ Renderer *renderInit(const float *vertices, GLsizeiptr size,
 
     return r;
 }
+
+void renderDraw(Renderer *r)
+{
+    shaderUse(&r->shader);
+    vertexArrayBind(&r->vao);
+    glDrawArrays(GL_TRIANGLES, 0, r->vertex_count);
+    vertexArrayUnbind();
+}
+
+void renderDeinit(Renderer *r)
+{
+    shaderDeinit(&r->shader);
+    vertexBufferDeinit(&r->vbo);
+    vertexArrayDeinit(&r->vao);
+    free(r);
+}
