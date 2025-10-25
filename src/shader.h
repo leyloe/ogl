@@ -8,7 +8,7 @@ typedef struct Shader
 } Shader;
 
 Shader shaderInit();
-int shaderCreateProgramVF(Shader *s, const char *vertexSource, const char *fragmentSource);
+GLint shaderCreateProgramVF(Shader *s, const char *vertexSource, const char *fragmentSource);
 void shaderUse(Shader *s);
 
 #endif

@@ -25,6 +25,7 @@ Renderer *renderInit(const float *vertices, GLsizeiptr size,
     r->shader = shaderInit();
     if (shaderCreateProgramVF(&r->shader, vs_src, fs_src) != 0)
     {
+        printf("Shader compilation/linking failed: %s\n", r->shader.infolog);
         free(r);
         return NULL;
     }

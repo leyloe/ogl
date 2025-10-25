@@ -5,9 +5,9 @@
 
 Shader shaderInit() { return (Shader){0}; }
 
-int shaderCreate(Shader *s, GLenum type, unsigned int *shader, const char *shaderSource)
+GLint shaderCreate(Shader *s, GLenum type, unsigned int *shader, const char *shaderSource)
 {
-    int success;
+    GLint success = 0;
 
     *shader = glCreateShader(type);
     glShaderSource(*shader, 1, &shaderSource, NULL);
@@ -23,12 +23,12 @@ int shaderCreate(Shader *s, GLenum type, unsigned int *shader, const char *shade
     return 0;
 }
 
-int shaderCreateProgramVF(Shader *s, const char *vertexSource, const char *fragmentSource)
+GLint shaderCreateProgramVF(Shader *s, const char *vertexSource, const char *fragmentSource)
 {
     unsigned int vertex;
     unsigned int fragment;
 
-    int success = shaderCreate(s, GL_VERTEX_SHADER, &vertex, vertexSource);
+    GLint success = shaderCreate(s, GL_VERTEX_SHADER, &vertex, vertexSource);
     if (success != 0)
         return success;
 
