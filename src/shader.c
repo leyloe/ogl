@@ -14,7 +14,7 @@ GLint shaderCreate(Shader *s, GLenum type, unsigned int *shader, const char *sha
     glCompileShader(*shader);
 
     glGetShaderiv(*shader, GL_COMPILE_STATUS, &success);
-    if (success != 0)
+    if (success == 0)
     {
         glGetShaderInfoLog(*shader, 512, NULL, s->infolog);
         return -1;
@@ -42,7 +42,7 @@ GLint shaderCreateProgramVF(Shader *s, const char *vertexSource, const char *fra
     glLinkProgram(s->id);
 
     glGetProgramiv(s->id, GL_LINK_STATUS, &success);
-    if (success != 0)
+    if (success == 0)
     {
         glGetProgramInfoLog(s->id, 512, NULL, s->infolog);
         return -2;
