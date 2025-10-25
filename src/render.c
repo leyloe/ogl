@@ -1,5 +1,19 @@
 #include <stdlib.h>
+#include <stddef.h>
+#include <glad/glad.h>
+
 #include "render.h"
+#include "vertexBuffer.h"
+#include "vertexArray.h"
+#include "shader.h"
+
+struct Renderer
+{
+    VertexArray vao;
+    VertexBuffer vbo;
+    Shader shader;
+    GLsizei vertex_count;
+};
 
 Renderer *renderInit(const float *vertices, GLsizeiptr size,
                      const char *vs_src, const char *fs_src)
@@ -37,7 +51,7 @@ void renderDraw(Renderer *r)
 
 void renderDeinit(Renderer *r)
 {
-    shaderDeinit(&r->shader);
+    shaderDeinit(r->shader);
     vertexBufferDeinit(&r->vbo);
     vertexArrayDeinit(&r->vao);
     free(r);

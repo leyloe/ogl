@@ -10,6 +10,7 @@
         "xtr1common": "c",
         "xutility": "c",
         "shader.h": "c",
-        "render.h": "c"
+        "render.h": "c",
+        "vertexbuffer.h": "c"
     }
 }
