@@ -47,7 +47,6 @@ void renderDraw(Renderer *r)
     shaderUse(&r->shader);
     vertexArrayBind(&r->vao);
     glDrawArrays(GL_TRIANGLES, 0, r->vertex_count);
-    vertexArrayUnbind();
 }
 
 void renderDeinit(Renderer *r)
