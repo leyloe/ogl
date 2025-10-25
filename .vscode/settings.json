@@ -1,0 +1,13 @@
+{
+    "files.associations": {
+        "glfw3.h": "c",
+        "compare": "c",
+        "memory": "c",
+        "tuple": "c",
+        "type_traits": "c",
+        "utility": "c",
+        "xmemory": "c",
+        "xtr1common": "c",
+        "xutility": "c"
+    }
+}
