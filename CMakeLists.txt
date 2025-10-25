@@ -7,6 +7,8 @@ set(SRC
     src/window.c
     src/render.c
     src/shader.c
+    src/vertexArray.c
+    src/vertexBuffer.c
     src/glad.c
 )
 
