@@ -1,3 +1,4 @@
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
 #include "window.h"
@@ -28,6 +29,9 @@ int windowCreate(Window *w)
         return -2;
 
     glfwMakeContextCurrent(w->handle);
+
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+        return -3;
 
     return 0;
 }

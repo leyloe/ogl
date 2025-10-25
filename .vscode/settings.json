@@ -11,6 +11,7 @@
         "xutility": "c",
         "shader.h": "c",
         "render.h": "c",
-        "vertexbuffer.h": "c"
+        "vertexbuffer.h": "c",
+        "glad.h": "c"
     }
 }
