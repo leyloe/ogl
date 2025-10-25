@@ -20,7 +20,7 @@ int shaderCreate(Shader *s, GLenum type, unsigned int *shader, const char *shade
         return -1;
     }
 
-    return 1;
+    return 0;
 }
 
 int shaderCreateProgramVF(Shader *s, const char *vertexSource, const char *fragmentSource)
@@ -45,13 +45,13 @@ int shaderCreateProgramVF(Shader *s, const char *vertexSource, const char *fragm
     if (!success)
     {
         glGetProgramInfoLog(s->shaderProgram, 512, NULL, s->infolog);
-        return -1;
+        return -2;
     }
 
     glDeleteShader(vertex);
     glDeleteShader(fragment);
 
-    return 1;
+    return 0;
 }
 
 void shaderUse(Shader *s)

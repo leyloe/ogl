@@ -14,27 +14,22 @@ void windowDeinit(Window *w)
     glfwTerminate();
 }
 
-Window windowInit(int width, int height, const char *title)
-{
-    Window w = {width, height, title, NULL};
+Window windowInit(int width, int height, const char *title) { return (Window){width, height, title, NULL}; }
 
+int windowCreate(Window *w)
+{
     if (!glfwInit())
-    {
-        return (Window){0};
-    }
+        return -1;
 
     windowHint(4, 6, GLFW_OPENGL_CORE_PROFILE);
 
-    w.handle = glfwCreateWindow(width, height, title, NULL, NULL);
-    if (!w.handle)
-    {
-        windowDeinit(&w);
-        return (Window){0};
-    }
+    w->handle = glfwCreateWindow(w->width, w->height, w->title, NULL, NULL);
+    if (!w->handle)
+        return -2;
 
-    glfwMakeContextCurrent(w.handle);
+    glfwMakeContextCurrent(w->handle);
 
-    return w;
+    return 0;
 }
 
 int windowShouldClose(Window *w)

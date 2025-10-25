@@ -4,8 +4,12 @@
 void main()
 {
     Window window = windowInit(800, 600, "title");
-    if (!&window)
-        printf("Failed to create window");
+
+    if (windowCreate(&window) != 0)
+    {
+        printf("Failed to create window\n");
+        return;
+    }
 
     while (!windowShouldClose(&window))
         windowUpdate(&window);
