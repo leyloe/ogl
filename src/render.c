@@ -32,7 +32,7 @@ Renderer *renderInit(const float *vertices, GLsizeiptr size,
     r->vbo = vertexBufferInit(vertices, size, GL_STATIC_DRAW);
     r->vao = vertexArrayInit();
 
-    r->vertex_count = (GLsizei)(size / (2 * sizeof(float)));
+    r->vertex_count = (GLsizei)(size / (3 * sizeof(float)));
 
     vertexArrayCreateAttrib(&r->vao, 0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
     vertexBufferUnbind();

@@ -14,7 +14,7 @@ int shaderCreate(Shader *s, GLenum type, unsigned int *shader, const char *shade
     glCompileShader(*shader);
 
     glGetShaderiv(*shader, GL_COMPILE_STATUS, &success);
-    if (!success)
+    if (success != 0)
     {
         glGetShaderInfoLog(*shader, 512, NULL, s->infolog);
         return -1;
@@ -29,11 +29,11 @@ int shaderCreateProgramVF(Shader *s, const char *vertexSource, const char *fragm
     unsigned int fragment;
 
     int success = shaderCreate(s, GL_VERTEX_SHADER, &vertex, vertexSource);
-    if (!success)
+    if (success != 0)
         return success;
 
     success = shaderCreate(s, GL_FRAGMENT_SHADER, &fragment, fragmentSource);
-    if (!success)
+    if (success != 0)
         return success;
 
     s->id = glCreateProgram();
@@ -42,7 +42,7 @@ int shaderCreateProgramVF(Shader *s, const char *vertexSource, const char *fragm
     glLinkProgram(s->id);
 
     glGetProgramiv(s->id, GL_LINK_STATUS, &success);
-    if (!success)
+    if (success != 0)
     {
         glGetProgramInfoLog(s->id, 512, NULL, s->infolog);
         return -2;
