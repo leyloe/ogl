@@ -4,7 +4,11 @@
 typedef struct Shader
 {
     char infolog[512];
-    unsigned int shaderProgram;
+    unsigned int id;
 } Shader;
+
+Shader shaderInit();
+int shaderCreateProgramVF(Shader *s, const char *vertexSource, const char *fragmentSource);
+void shaderUse(Shader *s);
 
 #endif

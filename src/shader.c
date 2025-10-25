@@ -36,15 +36,15 @@ int shaderCreateProgramVF(Shader *s, const char *vertexSource, const char *fragm
     if (!success)
         return success;
 
-    s->shaderProgram = glCreateProgram();
-    glAttachShader(s->shaderProgram, vertex);
-    glAttachShader(s->shaderProgram, fragment);
-    glLinkProgram(s->shaderProgram);
+    s->id = glCreateProgram();
+    glAttachShader(s->id, vertex);
+    glAttachShader(s->id, fragment);
+    glLinkProgram(s->id);
 
-    glGetProgramiv(s->shaderProgram, GL_LINK_STATUS, &success);
+    glGetProgramiv(s->id, GL_LINK_STATUS, &success);
     if (!success)
     {
-        glGetProgramInfoLog(s->shaderProgram, 512, NULL, s->infolog);
+        glGetProgramInfoLog(s->id, 512, NULL, s->infolog);
         return -2;
     }
 
@@ -56,10 +56,10 @@ int shaderCreateProgramVF(Shader *s, const char *vertexSource, const char *fragm
 
 void shaderUse(Shader *s)
 {
-    glUseProgram(s->shaderProgram);
+    glUseProgram(s->id);
 }
 
 void shaderDeinit(Shader *s)
 {
-    glDeleteProgram(s->shaderProgram);
+    glDeleteProgram(s->id);
 }
