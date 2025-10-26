@@ -15,15 +15,9 @@ struct Renderer
     GLsizei vertex_count;
 };
 
-Renderer *renderInit()
+Renderer *renderInit(void)
 {
-    Renderer *r = malloc(sizeof(Renderer));
-    if (!r)
-    {
-        return NULL;
-    }
-
-    return r;
+    return malloc(sizeof(Renderer));
 }
 
 int renderCreate(Renderer *r, const float *vertices, GLsizeiptr size,
