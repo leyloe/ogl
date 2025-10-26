@@ -26,12 +26,18 @@ int windowCreate(Window *w)
 
     w->handle = glfwCreateWindow(w->width, w->height, w->title, NULL, NULL);
     if (!w->handle)
+    {
+        glfwTerminate();
         return -2;
+    }
 
     glfwMakeContextCurrent(w->handle);
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+    {
+        glfwTerminate();
         return -3;
+    }
 
     return 0;
 }
