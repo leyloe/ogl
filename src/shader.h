@@ -5,7 +5,7 @@ typedef unsigned int GLLuint;
 
 typedef struct Shader
 {
-    char infolog[512];
+    GLchar infolog[512];
     GLLuint id;
 } Shader;
 

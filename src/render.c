@@ -13,6 +13,9 @@ struct Renderer
     VertexBuffer vbo;
     Shader shader;
     GLsizei vertex_count;
+    GLchar *s_infolog;
+    GLint s_status;
+    GLint r_status;
 };
 
 Renderer *renderInit(const float *vertices, GLsizeiptr size,
@@ -20,12 +23,18 @@ Renderer *renderInit(const float *vertices, GLsizeiptr size,
 {
     Renderer *r = malloc(sizeof(Renderer));
     if (!r)
+    {
+        r->r_status = 0;
         return NULL;
+    }
 
     r->shader = shaderInit();
-    if (shaderCreateProgramVF(&r->shader, vs_src, fs_src) != 0)
+    GLint status = shaderCreateProgramVF(&r->shader, vs_src, fs_src);
+    if (status)
     {
-        printf("Shader compilation/linking failed: %s\n", r->shader.infolog);
+        r->r_status = -1;
+        r->s_infolog = r->shader.infolog;
+        r->s_status = status;
         free(r);
         return NULL;
     }
