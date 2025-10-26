@@ -66,7 +66,9 @@ void renderDraw(Renderer *r)
 
 void renderDeinit(Renderer *r)
 {
-    shaderDelete(&r->shader);
+    if (r->shader.id)
+        shaderDelete(&r->shader);
+
     vertexBufferDelete(&r->vbo);
     vertexArrayDelete(&r->vao);
     free(r);
