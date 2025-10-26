@@ -15,7 +15,7 @@ struct Renderer
     GLsizei vertex_count;
 };
 
-Renderer *renderInit(void)
+Renderer *renderInit()
 {
     return malloc(sizeof(Renderer));
 }
