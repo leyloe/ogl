@@ -43,7 +43,7 @@ void main()
     if (!renderCreate(renderer, vertices, sizeof(vertices),
                       vertexShaderSource, fragmentShaderSource))
     {
-        printf("Failed to create renderer: %s\n", renderShaderInfolog(renderer));
+        printf("Failed to create scene: %s\n", renderShaderInfolog(renderer));
 
         renderDeinit(renderer);
         windowDestroy(&window);
