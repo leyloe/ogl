@@ -7,14 +7,14 @@ Shader shaderInit() { return (Shader){0}; }
 
 GLint shaderCreate(Shader *s, GLenum type, unsigned int *shader, const char *shaderSource)
 {
-    GLint success = 0;
+    GLint status = 0;
 
     *shader = glCreateShader(type);
     glShaderSource(*shader, 1, &shaderSource, NULL);
     glCompileShader(*shader);
 
-    glGetShaderiv(*shader, GL_COMPILE_STATUS, &success);
-    if (success == 0)
+    glGetShaderiv(*shader, GL_COMPILE_STATUS, &status);
+    if (!status)
     {
         glGetShaderInfoLog(*shader, 512, NULL, s->infolog);
         return -1;
@@ -28,21 +28,21 @@ GLint shaderCreateProgramVF(Shader *s, const char *vertexSource, const char *fra
     unsigned int vertex;
     unsigned int fragment;
 
-    GLint success = shaderCreate(s, GL_VERTEX_SHADER, &vertex, vertexSource);
-    if (success != 0)
-        return success;
+    GLint status = shaderCreate(s, GL_VERTEX_SHADER, &vertex, vertexSource);
+    if (status)
+        return status;
 
-    success = shaderCreate(s, GL_FRAGMENT_SHADER, &fragment, fragmentSource);
-    if (success != 0)
-        return success;
+    status = shaderCreate(s, GL_FRAGMENT_SHADER, &fragment, fragmentSource);
+    if (status)
+        return status;
 
     s->id = glCreateProgram();
     glAttachShader(s->id, vertex);
     glAttachShader(s->id, fragment);
     glLinkProgram(s->id);
 
-    glGetProgramiv(s->id, GL_LINK_STATUS, &success);
-    if (success == 0)
+    glGetProgramiv(s->id, GL_LINK_STATUS, &status);
+    if (!status)
     {
         glGetProgramInfoLog(s->id, 512, NULL, s->infolog);
         return -2;
