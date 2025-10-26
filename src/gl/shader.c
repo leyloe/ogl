@@ -2,6 +2,8 @@
 #include <glad/glad.h>
 
 #include "shader.h"
+#include "vertexArray.h"
+#include "vertexBuffer.h"
 
 Shader shaderInit() { return (Shader){0}; }
 
@@ -60,7 +62,7 @@ void shaderUse(Shader *s)
     glUseProgram(s->id);
 }
 
-void shaderDeinit(Shader *s)
+void shaderDelete(Shader *s)
 {
     glDeleteProgram(s->id);
 }

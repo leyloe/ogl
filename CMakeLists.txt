@@ -5,11 +5,11 @@ project(ogl)
 set(SRC
     src/main.c
     src/window.c
-    src/render.c
-    src/shader.c
-    src/vertexArray.c
-    src/vertexBuffer.c
-    src/glad.c
+    src/gl/render.c
+    src/gl/shader.c
+    src/gl/vertexArray.c
+    src/gl/vertexBuffer.c
+    src/gl/glad.c
 )
 
 add_executable(${PROJECT_NAME} ${SRC})
@@ -18,6 +18,7 @@ target_include_directories(${PROJECT_NAME}
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/gl
 )
 
 

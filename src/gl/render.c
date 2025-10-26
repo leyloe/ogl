@@ -13,30 +13,28 @@ struct Renderer
     VertexBuffer vbo;
     Shader shader;
     GLsizei vertex_count;
-    GLchar *s_infolog;
-    GLint s_status;
-    GLint r_status;
 };
 
-Renderer *renderInit(const float *vertices, GLsizeiptr size,
-                     const char *vs_src, const char *fs_src)
+Renderer *renderInit()
 {
     Renderer *r = malloc(sizeof(Renderer));
     if (!r)
     {
-        r->r_status = 0;
         return NULL;
     }
 
+    return r;
+}
+
+GLint renderCreate(Renderer *r, const float *vertices, GLsizeiptr size,
+                   const char *vs_src, const char *fs_src)
+{
     r->shader = shaderInit();
     GLint status = shaderCreateProgramVF(&r->shader, vs_src, fs_src);
     if (status)
     {
-        r->r_status = -1;
-        r->s_infolog = r->shader.infolog;
-        r->s_status = status;
         free(r);
-        return NULL;
+        return 0;
     }
 
     r->vbo = vertexBufferInit(vertices, size, GL_STATIC_DRAW);
@@ -48,7 +46,12 @@ Renderer *renderInit(const float *vertices, GLsizeiptr size,
     vertexBufferUnbind();
     vertexArrayUnbind();
 
-    return r;
+    return 1;
+}
+
+const GLchar *renderShaderInfolog(Renderer *r)
+{
+    return r->shader.infolog;
 }
 
 void renderDraw(Renderer *r)
@@ -60,7 +63,7 @@ void renderDraw(Renderer *r)
 
 void renderDeinit(Renderer *r)
 {
-    shaderDeinit(r->shader);
+    shaderDelete(&r->shader);
     vertexBufferDeinit(&r->vbo);
     vertexArrayDeinit(&r->vao);
     free(r);

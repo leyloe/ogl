@@ -12,7 +12,7 @@ typedef struct Window
 } Window;
 
 Window windowInit(int width, int height, const char *title);
-void windowDeinit(Window *window);
+void windowDestroy(Window *window);
 int windowShouldClose(Window *window);
 void windowUpdate(Window *window);
 

@@ -12,5 +12,6 @@ typedef struct Shader
 Shader shaderInit();
 GLint shaderCreateProgramVF(Shader *s, const GLchar *vertexSource, const GLchar *fragmentSource);
 void shaderUse(Shader *s);
+void shaderDelete(Shader *s);
 
 #endif

@@ -32,12 +32,21 @@ void main()
         return;
     }
 
-    Renderer *renderer = renderInit(vertices, sizeof(vertices),
-                                    vertexShaderSource, fragmentShaderSource);
+    Renderer *renderer = renderInit();
     if (!renderer)
     {
         printf("Failed to initialize renderer\n");
-        windowDeinit(&window);
+        windowDestroy(&window);
+        return;
+    }
+
+    if (!renderCreate(renderer, vertices, sizeof(vertices),
+                      vertexShaderSource, fragmentShaderSource))
+    {
+        printf("Failed to create renderer: %s\n", renderShaderInfolog(renderer));
+
+        renderDeinit(renderer);
+        windowDestroy(&window);
         return;
     }
 
@@ -48,5 +57,5 @@ void main()
     }
 
     renderDeinit(renderer);
-    windowDeinit(&window);
+    windowDestroy(&window);
 }

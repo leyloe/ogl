@@ -10,7 +10,7 @@ void windowHint(int major, int minor, int profile)
     glfwWindowHint(GLFW_OPENGL_PROFILE, profile);
 }
 
-void windowDeinit(Window *w)
+void windowDestroy(Window *w)
 {
     glfwTerminate();
 }
