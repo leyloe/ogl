@@ -7,7 +7,7 @@ typedef struct VertexArray
 } VertexArray;
 
 VertexArray vertexArrayInit();
-void vertexArrayDeinit(VertexArray *va);
+void vertexArrayDelete(VertexArray *va);
 void vertexArrayUnbind();
 void vertexArrayCreateAttrib(VertexArray *va, GLint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const void *pointer);
 

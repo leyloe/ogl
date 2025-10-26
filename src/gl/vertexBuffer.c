@@ -13,7 +13,7 @@ VertexBuffer vertexBufferInit(const void *data, GLsizeiptr size, GLenum usage)
     return vb;
 }
 
-void vertexBufferDeinit(VertexBuffer *vb)
+void vertexBufferDelete(VertexBuffer *vb)
 {
     glDeleteBuffers(1, &vb->id);
 }

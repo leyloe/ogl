@@ -63,7 +63,7 @@ void renderDraw(Renderer *r)
 void renderDeinit(Renderer *r)
 {
     shaderDelete(&r->shader);
-    vertexBufferDeinit(&r->vbo);
-    vertexArrayDeinit(&r->vao);
+    vertexBufferDelete(&r->vbo);
+    vertexArrayDelete(&r->vao);
     free(r);
 }

@@ -12,7 +12,7 @@ VertexArray vertexArrayInit()
     return va;
 }
 
-void vertexArrayDeinit(VertexArray *va)
+void vertexArrayDelete(VertexArray *va)
 {
     glDeleteVertexArrays(1, &va->id);
 }

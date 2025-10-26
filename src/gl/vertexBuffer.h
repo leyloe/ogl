@@ -7,7 +7,7 @@ typedef struct VertexBuffer
 } VertexBuffer;
 
 VertexBuffer vertexBufferInit(const void *data, GLsizeiptr size, GLenum usage);
-void vertexBufferDeinit(VertexBuffer *vb);
+void vertexBufferDelete(VertexBuffer *vb);
 void vertexBufferUnbind();
 
 #endif
