@@ -9,14 +9,14 @@ Shader shaderInit() { return (Shader){0}; }
 
 int shaderCreate(Shader *s, GLenum type, GLuint *shader, const GLchar *shaderSource)
 {
-    GLint status = 0;
+    int ok = 0;
 
     *shader = glCreateShader(type);
     glShaderSource(*shader, 1, &shaderSource, NULL);
     glCompileShader(*shader);
 
-    glGetShaderiv(*shader, GL_COMPILE_STATUS, &status);
-    if (!status)
+    glGetShaderiv(*shader, GL_COMPILE_STATUS, &ok);
+    if (!ok)
     {
         glGetShaderInfoLog(*shader, 512, NULL, s->infolog);
         glDeleteShader(*shader);
@@ -31,12 +31,12 @@ int shaderCreateProgramVF(Shader *s, const GLchar *vertexSource, const GLchar *f
     GLLuint vertex;
     GLLuint fragment;
 
-    GLint status = shaderCreate(s, GL_VERTEX_SHADER, &vertex, vertexSource);
-    if (status)
+    int ok = shaderCreate(s, GL_VERTEX_SHADER, &vertex, vertexSource);
+    if (!ok)
         return VERTEX_COMPILATION_ERROR;
 
-    status = shaderCreate(s, GL_FRAGMENT_SHADER, &fragment, fragmentSource);
-    if (status)
+    ok = shaderCreate(s, GL_FRAGMENT_SHADER, &fragment, fragmentSource);
+    if (!ok)
         return FRAGMENT_COMPILATION_ERROR;
 
     s->id = glCreateProgram();
@@ -44,8 +44,8 @@ int shaderCreateProgramVF(Shader *s, const GLchar *vertexSource, const GLchar *f
     glAttachShader(s->id, fragment);
     glLinkProgram(s->id);
 
-    glGetProgramiv(s->id, GL_LINK_STATUS, &status);
-    if (!status)
+    glGetProgramiv(s->id, GL_LINK_STATUS, &ok);
+    if (!ok)
     {
         glGetProgramInfoLog(s->id, 512, NULL, s->infolog);
         return PROGRAM_LINKING_ERROR;
