@@ -32,7 +32,7 @@ void main()
 {
     Window window = windowInit(800, 600, "title");
 
-    if (windowCreate(&window) != 0)
+    if (!windowCreate(&window))
     {
         printf("Failed to create window\n");
         return;
