@@ -33,7 +33,6 @@ GLint renderCreate(Renderer *r, const float *vertices, GLsizeiptr size,
     GLint status = shaderCreateProgramVF(&r->shader, vs_src, fs_src);
     if (status)
     {
-        free(r);
         return 0;
     }
 
