@@ -32,10 +32,22 @@ void main()
 {
     Window window = windowInit(800, 600, "title");
 
-    if (!windowCreate(&window))
+    switch (windowCreate(&window))
     {
-        printf("Failed to create window\n");
+    case GLFW_INITIALIZATION_ERROR:
+        printf("Failed to initialize GLFW\n");
         return;
+
+    case GLFW_WINDOW_CREATION_ERROR:
+        printf("Failed to create GLFW window\n");
+        return;
+
+    case GLAD_INITIALIZATION_ERROR:
+        printf("Failed to initialize GLAD\n");
+        return;
+
+    default:
+        break;
     }
 
     Renderer *renderer = renderInit();

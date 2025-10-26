@@ -20,7 +20,7 @@ Window windowInit(int width, int height, const char *title) { return (Window){wi
 int windowCreate(Window *w)
 {
     if (!glfwInit())
-        return 0;
+        return GLFW_INITIALIZATION_ERROR;
 
     windowHint(4, 6, GLFW_OPENGL_CORE_PROFILE);
 
@@ -28,7 +28,7 @@ int windowCreate(Window *w)
     if (!w->handle)
     {
         glfwTerminate();
-        return -1;
+        return GLFW_WINDOW_CREATION_ERROR;
     }
 
     glfwMakeContextCurrent(w->handle);
@@ -36,7 +36,7 @@ int windowCreate(Window *w)
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
         glfwTerminate();
-        return -2;
+        return GLAD_INITIALIZATION_ERROR;
     }
 
     return 1;

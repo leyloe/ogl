@@ -3,6 +3,10 @@
 
 typedef struct GLFWwindow GLFWwindow;
 
+#define GLFW_INITIALIZATION_ERROR 0
+#define GLFW_WINDOW_CREATION_ERROR -1
+#define GLAD_INITIALIZATION_ERROR -2
+
 typedef struct Window
 {
     int width;
