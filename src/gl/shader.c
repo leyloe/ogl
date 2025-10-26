@@ -7,7 +7,7 @@
 
 Shader shaderInit() { return (Shader){0}; }
 
-GLint shaderCreate(Shader *s, GLenum type, GLuint *shader, const GLchar *shaderSource)
+int shaderCreate(Shader *s, GLenum type, GLuint *shader, const GLchar *shaderSource)
 {
     GLint status = 0;
 
@@ -20,24 +20,24 @@ GLint shaderCreate(Shader *s, GLenum type, GLuint *shader, const GLchar *shaderS
     {
         glGetShaderInfoLog(*shader, 512, NULL, s->infolog);
         glDeleteShader(*shader);
-        return -1;
+        return 0;
     }
 
-    return 0;
+    return 1;
 }
 
-GLint shaderCreateProgramVF(Shader *s, const GLchar *vertexSource, const GLchar *fragmentSource)
+int shaderCreateProgramVF(Shader *s, const GLchar *vertexSource, const GLchar *fragmentSource)
 {
     GLLuint vertex;
     GLLuint fragment;
 
     GLint status = shaderCreate(s, GL_VERTEX_SHADER, &vertex, vertexSource);
     if (status)
-        return status;
+        return VERTEX_COMPILATION_ERROR;
 
     status = shaderCreate(s, GL_FRAGMENT_SHADER, &fragment, fragmentSource);
     if (status)
-        return status;
+        return FRAGMENT_COMPILATION_ERROR;
 
     s->id = glCreateProgram();
     glAttachShader(s->id, vertex);
@@ -48,13 +48,13 @@ GLint shaderCreateProgramVF(Shader *s, const GLchar *vertexSource, const GLchar 
     if (!status)
     {
         glGetProgramInfoLog(s->id, 512, NULL, s->infolog);
-        return -2;
+        return PROGRAM_LINKING_ERROR;
     }
 
     glDeleteShader(vertex);
     glDeleteShader(fragment);
 
-    return 0;
+    return 1;
 }
 
 void shaderUse(Shader *s)

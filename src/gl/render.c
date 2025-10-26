@@ -26,14 +26,24 @@ Renderer *renderInit()
     return r;
 }
 
-GLint renderCreate(Renderer *r, const float *vertices, GLsizeiptr size,
-                   const char *vs_src, const char *fs_src)
+int renderCreate(Renderer *r, const float *vertices, GLsizeiptr size,
+                 const char *vs_src, const char *fs_src)
 {
     r->shader = shaderInit();
-    GLint status = shaderCreateProgramVF(&r->shader, vs_src, fs_src);
-    if (status)
+
+    switch (shaderCreateProgramVF(&r->shader, vs_src, fs_src))
     {
-        return 0;
+    case VERTEX_COMPILATION_ERROR:
+        return SHADER_VERTEX_COMPILATION_ERROR;
+
+    case FRAGMENT_COMPILATION_ERROR:
+        return SHADER_FRAGMENT_COMPILATION_ERROR;
+
+    case PROGRAM_LINKING_ERROR:
+        return SHADER_PROGRAM_LINKING_ERROR;
+
+    default:
+        break;
     }
 
     r->vbo = vertexBufferInit(vertices, size, GL_STATIC_DRAW);
