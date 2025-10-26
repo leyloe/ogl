@@ -28,6 +28,10 @@ void cleanup(Renderer *renderer, Window *window)
     windowDestroy(window);
 }
 
+void printe(const char *message) { fprintf(stderr, "%s\n", message); }
+
+void printShaderError(Renderer *renderer, const char *message) { fprintf(stderr, "%s: %s\n", message, renderShaderInfolog(renderer)); }
+
 void main()
 {
     Window window = windowInit(800, 600, "title");
@@ -35,15 +39,15 @@ void main()
     switch (windowCreate(&window))
     {
     case GLFW_INITIALIZATION_ERROR:
-        printf("Failed to initialize GLFW\n");
+        printe("Failed to initialize GLFW");
         return;
 
     case GLFW_WINDOW_CREATION_ERROR:
-        printf("Failed to create GLFW window\n");
+        printe("Failed to create GLFW window");
         return;
 
     case GLAD_INITIALIZATION_ERROR:
-        printf("Failed to initialize GLAD\n");
+        printe("Failed to initialize GLAD");
         return;
 
     default:
@@ -53,7 +57,7 @@ void main()
     Renderer *renderer = renderInit();
     if (!renderer)
     {
-        printf("Failed to initialize renderer\n");
+        printe("Failed to initialize renderer");
         windowDestroy(&window);
         return;
     }
@@ -61,17 +65,17 @@ void main()
     switch (renderCreateScene(renderer, vertices, sizeof(vertices), vertexShaderSource, fragmentShaderSource))
     {
     case SHADER_VERTEX_COMPILATION_ERROR:
-        printf("Vertex shader compilation failed: %s\n", renderShaderInfolog(renderer));
+        printShaderError(renderer, "Vertex shader compilation failed");
         cleanup(renderer, &window);
         return;
 
     case SHADER_FRAGMENT_COMPILATION_ERROR:
-        printf("Fragment shader compilation failed: %s\n", renderShaderInfolog(renderer));
+        printShaderError(renderer, "Fragment shader compilation failed");
         cleanup(renderer, &window);
         return;
 
     case SHADER_PROGRAM_LINKING_ERROR:
-        printf("Shader program linking failed: %s\n", renderShaderInfolog(renderer));
+        printShaderError(renderer, "Shader program linking failed");
         cleanup(renderer, &window);
         return;
 
