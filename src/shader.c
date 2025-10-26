@@ -5,7 +5,7 @@
 
 Shader shaderInit() { return (Shader){0}; }
 
-GLint shaderCreate(Shader *s, GLenum type, unsigned int *shader, const char *shaderSource)
+GLint shaderCreate(Shader *s, GLenum type, GLuint *shader, const GLchar *shaderSource)
 {
     GLint status = 0;
 
@@ -17,16 +17,17 @@ GLint shaderCreate(Shader *s, GLenum type, unsigned int *shader, const char *sha
     if (!status)
     {
         glGetShaderInfoLog(*shader, 512, NULL, s->infolog);
+        glDeleteShader(*shader);
         return -1;
     }
 
     return 0;
 }
 
-GLint shaderCreateProgramVF(Shader *s, const char *vertexSource, const char *fragmentSource)
+GLint shaderCreateProgramVF(Shader *s, const GLchar *vertexSource, const GLchar *fragmentSource)
 {
-    unsigned int vertex;
-    unsigned int fragment;
+    GLLuint vertex;
+    GLLuint fragment;
 
     GLint status = shaderCreate(s, GL_VERTEX_SHADER, &vertex, vertexSource);
     if (status)

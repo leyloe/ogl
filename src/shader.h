@@ -1,14 +1,16 @@
 #ifndef SHADER_H
 #define SHADER_H
 
+typedef unsigned int GLLuint;
+
 typedef struct Shader
 {
     char infolog[512];
-    unsigned int id;
+    GLLuint id;
 } Shader;
 
 Shader shaderInit();
-GLint shaderCreateProgramVF(Shader *s, const char *vertexSource, const char *fragmentSource);
+GLint shaderCreateProgramVF(Shader *s, const GLchar *vertexSource, const GLchar *fragmentSource);
 void shaderUse(Shader *s);
 
 #endif
