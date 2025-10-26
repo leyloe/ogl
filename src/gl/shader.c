@@ -26,7 +26,7 @@ int shaderCreate(Shader *s, GLenum type, GLuint *shader, const GLchar *shaderSou
     return 1;
 }
 
-int shaderLinkProgram(Shader *s, GLLuint vertex, GLLuint fragment)
+int shaderLinkProgram(Shader *s, GLuint vertex, GLuint fragment)
 {
     int ok = 0;
 
@@ -47,8 +47,8 @@ int shaderLinkProgram(Shader *s, GLLuint vertex, GLLuint fragment)
 
 int shaderCreateProgramVF(Shader *s, const GLchar *vertexSource, const GLchar *fragmentSource)
 {
-    GLLuint vertex;
-    GLLuint fragment;
+    GLuint vertex;
+    GLuint fragment;
 
     int ok = shaderCreate(s, GL_VERTEX_SHADER, &vertex, vertexSource);
     if (!ok)
@@ -56,11 +56,18 @@ int shaderCreateProgramVF(Shader *s, const GLchar *vertexSource, const GLchar *f
 
     ok = shaderCreate(s, GL_FRAGMENT_SHADER, &fragment, fragmentSource);
     if (!ok)
+    {
+        glDeleteShader(vertex);
         return FRAGMENT_COMPILATION_ERROR;
+    }
 
     ok = shaderLinkProgram(s, vertex, fragment);
     if (!ok)
+    {
+        glDeleteShader(vertex);
+        glDeleteShader(fragment);
         return PROGRAM_LINKING_ERROR;
+    }
 
     glDeleteShader(vertex);
     glDeleteShader(fragment);

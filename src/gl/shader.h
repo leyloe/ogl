@@ -5,12 +5,10 @@
 #define FRAGMENT_COMPILATION_ERROR -1
 #define PROGRAM_LINKING_ERROR -2
 
-typedef unsigned int GLLuint;
-
 typedef struct Shader
 {
     GLchar infolog[512];
-    GLLuint id;
+    GLuint id;
 } Shader;
 
 Shader shaderInit();

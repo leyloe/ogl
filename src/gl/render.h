@@ -7,7 +7,6 @@
 
 typedef struct Renderer Renderer;
 typedef long long GLsizeiptr;
-typedef int GLint;
 typedef char GLchar;
 
 Renderer *renderInit();
