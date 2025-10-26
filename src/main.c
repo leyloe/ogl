@@ -46,7 +46,7 @@ void main()
         return;
     }
 
-    switch (renderCreate(renderer, vertices, sizeof(vertices), vertexShaderSource, fragmentShaderSource))
+    switch (renderCreateScene(renderer, vertices, sizeof(vertices), vertexShaderSource, fragmentShaderSource))
     {
     case SHADER_VERTEX_COMPILATION_ERROR:
         printf("Vertex shader compilation failed: %s\n", renderShaderInfolog(renderer));

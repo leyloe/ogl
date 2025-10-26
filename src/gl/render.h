@@ -10,8 +10,8 @@ typedef long long GLsizeiptr;
 typedef char GLchar;
 
 Renderer *renderInit();
-int renderCreate(Renderer *r, const float *vertices, GLsizeiptr size,
-                 const char *vs_src, const char *fs_src);
+int renderCreateScene(Renderer *r, const float *vertices, GLsizeiptr size,
+                      const char *vs_src, const char *fs_src);
 const GLchar *renderShaderInfolog(Renderer *r);
 void renderDraw(Renderer *r);
 void renderDeinit(Renderer *r);

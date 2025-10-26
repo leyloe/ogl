@@ -20,8 +20,8 @@ Renderer *renderInit()
     return malloc(sizeof(Renderer));
 }
 
-int renderCreate(Renderer *r, const float *vertices, GLsizeiptr size,
-                 const char *vs_src, const char *fs_src)
+int renderCreateScene(Renderer *r, const float *vertices, GLsizeiptr size,
+                      const char *vs_src, const char *fs_src)
 {
     r->shader = shaderInit();
 
