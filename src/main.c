@@ -1,7 +1,7 @@
 #include "app.h"
 
 #define WINDOW_WIDTH 800
-#define WINDOW_HEIGHT 600
+#define WINDOW_HEIGHT 800
 
 int main(void) {
     app a;
