@@ -1,6 +1,7 @@
 #ifndef APP_H
 #define APP_H
 
+#include "mesh.h"
 #include "window.h"
 #include "render.h"
 
@@ -10,10 +11,11 @@
 typedef struct {
     window window;
     renderer *renderer;
+    mesh mesh;
 } app;
 
 int app_create(app *a, int width, int height, const char *title);
 void app_run(const app *a);
 void app_destroy(app *a);
 
-#endif // APP_H
+#endif
