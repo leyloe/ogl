@@ -1,19 +1,31 @@
 #ifndef RENDER_H
 #define RENDER_H
 
-#define SHADER_VERTEX_COMPILATION_ERROR 0
-#define SHADER_FRAGMENT_COMPILATION_ERROR -1
-#define SHADER_PROGRAM_LINKING_ERROR -2
+#include <glad/glad.h>
 
-typedef struct Renderer Renderer;
-typedef long long GLsizeiptr;
-typedef char GLchar;
+#include "vertex_array.h"
+#include "vertex_buffer.h"
+#include "shader.h"
 
-Renderer *renderInit();
-int renderCreateScene(Renderer *r, const float *vertices, GLsizeiptr size,
-                      const char *vs_src, const char *fs_src);
-const GLchar *renderShaderInfolog(Renderer *r);
-void renderDraw(Renderer *r);
-void renderDeinit(Renderer *r);
+typedef enum {
+    render_success = 0,
+    render_shader_error_vertex,
+    render_shader_error_fragment,
+    render_shader_error_linking
+} render_result;
+
+typedef struct renderer {
+    vertex_array vao;
+    vertex_buffer vbo;
+    shader shader;
+    GLsizei vertex_count;
+} renderer;
+
+renderer *render_create(void);
+render_result render_create_scene(renderer *r, const float *vertices, GLsizeiptr size, const char *vs_src,
+                                  const char *fs_src);
+const GLchar *render_get_shader_info_log(const renderer *r);
+void render_draw(const renderer *r);
+void render_destroy(renderer *r);
 
 #endif

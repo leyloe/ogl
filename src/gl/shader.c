@@ -1,24 +1,21 @@
-#include <stddef.h>
 #include <glad/glad.h>
 
 #include "shader.h"
-#include "vertexArray.h"
-#include "vertexBuffer.h"
 
-Shader shaderInit() { return (Shader){0}; }
+shader shader_create(void) {
+    return (shader){.id = 0, .info_log = {0}};
+}
 
-int shaderCreate(Shader *s, GLenum type, GLuint *shader, const GLchar *shaderSource)
-{
+static int shader_compile(shader *s, const GLenum type, GLuint *shader, const GLchar *source) {
     int ok = 0;
 
     *shader = glCreateShader(type);
-    glShaderSource(*shader, 1, &shaderSource, NULL);
+    glShaderSource(*shader, 1, &source, nullptr);
     glCompileShader(*shader);
 
     glGetShaderiv(*shader, GL_COMPILE_STATUS, &ok);
-    if (!ok)
-    {
-        glGetShaderInfoLog(*shader, 512, NULL, s->infolog);
+    if (!ok) {
+        glGetShaderInfoLog(*shader, 512, nullptr, s->info_log);
         glDeleteShader(*shader);
         return 0;
     }
@@ -26,8 +23,7 @@ int shaderCreate(Shader *s, GLenum type, GLuint *shader, const GLchar *shaderSou
     return 1;
 }
 
-int shaderLinkProgram(Shader *s, GLuint vertex, GLuint fragment)
-{
+static int shader_link_program(shader *s, const GLuint vertex, const GLuint fragment) {
     int ok = 0;
 
     s->id = glCreateProgram();
@@ -36,51 +32,47 @@ int shaderLinkProgram(Shader *s, GLuint vertex, GLuint fragment)
     glLinkProgram(s->id);
 
     glGetProgramiv(s->id, GL_LINK_STATUS, &ok);
-    if (!ok)
-    {
-        glGetProgramInfoLog(s->id, 512, NULL, s->infolog);
+    if (!ok) {
+        glGetProgramInfoLog(s->id, 512, nullptr, s->info_log);
         return 0;
     }
 
     return 1;
 }
 
-int shaderCreateProgramVF(Shader *s, const GLchar *vertexSource, const GLchar *fragmentSource)
-{
+shader_result shader_create_program_vf(shader *s, const GLchar *vertex_source, const GLchar *fragment_source) {
     GLuint vertex;
     GLuint fragment;
 
-    int ok = shaderCreate(s, GL_VERTEX_SHADER, &vertex, vertexSource);
-    if (!ok)
-        return VERTEX_COMPILATION_ERROR;
-
-    ok = shaderCreate(s, GL_FRAGMENT_SHADER, &fragment, fragmentSource);
-    if (!ok)
-    {
-        glDeleteShader(vertex);
-        return FRAGMENT_COMPILATION_ERROR;
+    int ok = shader_compile(s, GL_VERTEX_SHADER, &vertex, vertex_source);
+    if (!ok) {
+        return shader_error_vertex;
     }
 
-    ok = shaderLinkProgram(s, vertex, fragment);
-    if (!ok)
-    {
+    ok = shader_compile(s, GL_FRAGMENT_SHADER, &fragment, fragment_source);
+    if (!ok) {
+        glDeleteShader(vertex);
+        return shader_error_fragment;
+    }
+
+    ok = shader_link_program(s, vertex, fragment);
+    if (!ok) {
         glDeleteShader(vertex);
         glDeleteShader(fragment);
-        return PROGRAM_LINKING_ERROR;
+        return shader_error_linking;
     }
 
     glDeleteShader(vertex);
     glDeleteShader(fragment);
 
-    return 1;
+    return shader_success;
 }
 
-void shaderUse(Shader *s)
-{
+void shader_use(const shader *s) {
     glUseProgram(s->id);
 }
 
-void shaderDelete(Shader *s)
-{
+void shader_destroy(shader *s) {
     glDeleteProgram(s->id);
+    s->id = 0;
 }

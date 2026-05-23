@@ -3,51 +3,58 @@
 
 #include "window.h"
 
-void windowHint(int major, int minor, int profile)
+void window_hint(const int major, const int minor, const int profile)
 {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, major);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, minor);
     glfwWindowHint(GLFW_OPENGL_PROFILE, profile);
 }
 
-void windowDestroy(Window *w)
+void window_destroy(const window *w)
 {
+    (void)w;
     glfwTerminate();
 }
 
-Window windowInit(int width, int height, const char *title) { return (Window){width, height, title, NULL}; }
+window window_create(const int width, const int height, const char *title)
+{
+    return (window){width, height, title, nullptr};
+}
 
-int windowCreate(Window *w)
+window_result window_open(window *w)
 {
     if (!glfwInit())
-        return GLFW_INITIALIZATION_ERROR;
+        return window_glfw_error_init;
 
-    windowHint(4, 6, GLFW_OPENGL_CORE_PROFILE);
+    window_hint(3, 3, GLFW_OPENGL_CORE_PROFILE);
 
-    w->handle = glfwCreateWindow(w->width, w->height, w->title, NULL, NULL);
+    w->handle = glfwCreateWindow(w->width, w->height, w->title, nullptr, nullptr);
     if (!w->handle)
     {
         glfwTerminate();
-        return GLFW_WINDOW_CREATION_ERROR;
+        return window_glfw_error_create;
     }
 
     glfwMakeContextCurrent(w->handle);
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wcast-function-type-strict"
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
         glfwTerminate();
-        return GLAD_INITIALIZATION_ERROR;
+        return window_glad_error_init;
     }
+#pragma clang diagnostic pop
 
-    return 1;
+    return window_success;
 }
 
-int windowShouldClose(Window *w)
+int window_should_close(const window *w)
 {
-    return glfwWindowShouldClose(w->handle);
+    return glfwWindowShouldClose(w->handle) != 0;
 }
 
-void windowUpdate(Window *w)
+void window_update(const window *w)
 {
     glfwSwapBuffers(w->handle);
     glfwPollEvents();

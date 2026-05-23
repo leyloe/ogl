@@ -1,75 +1,65 @@
 #include <stdlib.h>
-#include <stddef.h>
 #include <glad/glad.h>
 
 #include "render.h"
-#include "vertexBuffer.h"
-#include "vertexArray.h"
+#include "vertex_buffer.h"
+#include "vertex_array.h"
 #include "shader.h"
 
-struct Renderer
-{
-    VertexArray vao;
-    VertexBuffer vbo;
-    Shader shader;
-    GLsizei vertex_count;
-};
 
-Renderer *renderInit()
+
+renderer *render_create(void)
 {
-    return malloc(sizeof(Renderer));
+    const auto r = (renderer*)malloc(sizeof(renderer));
+    return r;
 }
 
-int renderCreateScene(Renderer *r, const float *vertices, GLsizeiptr size,
-                      const char *vs_src, const char *fs_src)
+render_result render_create_scene(renderer *r, const float *vertices, const GLsizeiptr size,
+                                 const char *vs_src, const char *fs_src)
 {
-    r->shader = shaderInit();
-
-    switch (shaderCreateProgramVF(&r->shader, vs_src, fs_src))
-    {
-    case VERTEX_COMPILATION_ERROR:
-        return SHADER_VERTEX_COMPILATION_ERROR;
-
-    case FRAGMENT_COMPILATION_ERROR:
-        return SHADER_FRAGMENT_COMPILATION_ERROR;
-
-    case PROGRAM_LINKING_ERROR:
-        return SHADER_PROGRAM_LINKING_ERROR;
-
-    default:
-        break;
+    const shader_result shader_status = shader_create_program_vf(&r->shader, vs_src, fs_src);
+    if (shader_status == shader_error_vertex) {
+        return render_shader_error_vertex;
+    }
+    if (shader_status == shader_error_fragment) {
+        return render_shader_error_fragment;
+    }
+    if (shader_status == shader_error_linking) {
+        return render_shader_error_linking;
     }
 
-    r->vbo = vertexBufferInit(vertices, size, GL_STATIC_DRAW);
-    r->vao = vertexArrayInit();
+    r->vbo = vertex_buffer_create(vertices, size, GL_STATIC_DRAW);
+    r->vao = vertex_array_create();
 
-    r->vertex_count = (GLsizei)(size / (3 * sizeof(float)));
+    r->vertex_count = (GLsizei)(size / (3 * (GLsizeiptr)sizeof(float)));
 
-    vertexArrayCreateAttrib(&r->vao, 0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
-    vertexBufferUnbind();
-    vertexArrayUnbind();
+    vertex_array_create_attrib(&r->vao, 0, 3, GL_FLOAT, GL_FALSE, 3 * (GLsizei)sizeof(float), nullptr);
+    vertex_buffer_unbind();
+    vertex_array_unbind();
 
-    return 1;
+    return render_success;
 }
 
-const GLchar *renderShaderInfolog(Renderer *r)
+const GLchar *render_get_shader_info_log(const renderer *r)
 {
-    return r->shader.infolog;
+    return r->shader.info_log;
 }
 
-void renderDraw(Renderer *r)
+void render_draw(const renderer *r)
 {
-    shaderUse(&r->shader);
-    vertexArrayBind(&r->vao);
+    shader_use(&r->shader);
+    vertex_array_bind(&r->vao);
     glDrawArrays(GL_TRIANGLES, 0, r->vertex_count);
 }
 
-void renderDeinit(Renderer *r)
+void render_destroy(renderer *r)
 {
-    if (r->shader.id)
-        shaderDelete(&r->shader);
+    if (r == nullptr) return;
 
-    vertexBufferDelete(&r->vbo);
-    vertexArrayDelete(&r->vao);
+    if (r->shader.id)
+        shader_destroy(&r->shader);
+
+    vertex_buffer_destroy(&r->vbo);
+    vertex_array_destroy(&r->vao);
     free(r);
 }

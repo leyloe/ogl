@@ -1,19 +1,23 @@
 #ifndef SHADER_H
 #define SHADER_H
 
-#define VERTEX_COMPILATION_ERROR 0
-#define FRAGMENT_COMPILATION_ERROR -1
-#define PROGRAM_LINKING_ERROR -2
+#include <glad/glad.h>
 
-typedef struct Shader
-{
-    GLchar infolog[512];
+typedef enum {
+    shader_success = 1,
+    shader_error_vertex = 0,
+    shader_error_fragment = -1,
+    shader_error_linking = -2
+} shader_result;
+
+typedef struct shader {
+    GLchar info_log[512];
     GLuint id;
-} Shader;
+} shader;
 
-Shader shaderInit();
-int shaderCreateProgramVF(Shader *s, const GLchar *vertexSource, const GLchar *fragmentSource);
-void shaderUse(Shader *s);
-void shaderDelete(Shader *s);
+shader shader_create(void);
+shader_result shader_create_program_vf(shader *s, const GLchar *vertex_source, const GLchar *fragment_source);
+void shader_use(const shader *s);
+void shader_destroy(shader *s);
 
 #endif

@@ -1,23 +1,27 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
-typedef struct GLFWwindow GLFWwindow;
+#include <GLFW/glfw3.h>
 
-#define GLFW_INITIALIZATION_ERROR 0
-#define GLFW_WINDOW_CREATION_ERROR -1
-#define GLAD_INITIALIZATION_ERROR -2
+typedef enum {
+    window_success = 0,
+    window_glfw_error_init,
+    window_glfw_error_create,
+    window_glad_error_init
+} window_result;
 
-typedef struct Window
-{
+typedef struct window {
     int width;
     int height;
     const char *title;
     GLFWwindow *handle;
-} Window;
+} window;
 
-Window windowInit(int width, int height, const char *title);
-void windowDestroy(Window *window);
-int windowShouldClose(Window *window);
-void windowUpdate(Window *window);
+window window_create(int width, int height, const char *title);
+void window_hint(int major, int minor, int profile);
+window_result window_open(window *w);
+void window_destroy(const window *w);
+int window_should_close(const window *w);
+void window_update(const window *w);
 
 #endif
