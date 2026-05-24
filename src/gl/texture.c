@@ -39,6 +39,6 @@ void texture_bind(const texture *t) {
     glBindTexture(GL_TEXTURE_2D, t->id);
 }
 
-void texture_destroy( texture *t) {
+void texture_destroy(const texture *t) {
     glDeleteTextures(1, &t->id);
 }
