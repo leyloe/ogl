@@ -8,7 +8,7 @@
 
 renderer *render_create(void)
 {
-    const auto r = (renderer*)malloc(sizeof(renderer));
+    const auto r = (renderer*)calloc(1, sizeof(renderer));
     return r;
 }
 
@@ -40,12 +40,14 @@ void render_draw(const renderer *r, const mesh *m, const texture *t)
     mesh_draw(m);
 }
 
+void render_clear()
+{
+    glClear(GL_COLOR_BUFFER_BIT);
+}
+
 void render_destroy(renderer *r)
 {
     if (r == nullptr) return;
-
-    if (r->shader.id)
-        shader_destroy(&r->shader);
-
+    shader_destroy(&r->shader);
     free(r);
 }

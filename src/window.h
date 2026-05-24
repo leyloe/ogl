@@ -20,7 +20,7 @@ typedef struct window {
 window window_create(int width, int height, const char *title);
 void window_hint(int major, int minor, int profile);
 window_result window_open(window *w);
-void window_destroy(const window *w);
+void window_destroy(void);
 int window_should_close(const window *w);
 void window_update(const window *w);
 

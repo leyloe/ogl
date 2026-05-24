@@ -1,7 +1,11 @@
 #include "gl/texture.h"
 
 #include <stb_image.h>
-#include "glad/glad.h"
+#include <glad/glad.h>
+
+void texture_init(void) {
+    stbi_set_flip_vertically_on_load(1);
+}
 
 texture texture_create(void) {
     texture t;
@@ -20,12 +24,14 @@ texture texture_create(void) {
 texture_result load_texture_from_file(const char *path, const texture *t) {
     int w, h, channels;
     unsigned char *data = stbi_load(path, &w, &h, &channels, STBI_rgb_alpha);
+
     if (data == nullptr) {
         return texture_error_load;
     }
 
     glBindTexture(GL_TEXTURE_2D, t->id);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+    glGenerateMipmap(GL_TEXTURE_2D);
     stbi_image_free(data);
 
     return texture_success;
@@ -39,6 +45,7 @@ void texture_bind(const texture *t) {
     glBindTexture(GL_TEXTURE_2D, t->id);
 }
 
-void texture_destroy(const texture *t) {
+void texture_destroy(texture *t) {
     glDeleteTextures(1, &t->id);
+    t->id = 0;
 }

@@ -1,7 +1,7 @@
 #ifndef ELEMENT_BUFFER_H
 #define ELEMENT_BUFFER_H
 
-#include "glad/glad.h"
+#include <glad/glad.h>
 
 typedef struct element_buffer {
     GLuint id;

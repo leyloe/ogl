@@ -2,10 +2,6 @@
 
 #include "shader.h"
 
-shader shader_create(void) {
-    return (shader){.id = 0, .info_log = {0}};
-}
-
 static int shader_compile(shader *s, const GLenum type, GLuint *shader, const GLchar *source) {
     int ok = 0;
 
@@ -70,6 +66,11 @@ shader_result shader_create_program_vf(shader *s, const GLchar *vertex_source, c
 
 void shader_use(const shader *s) {
     glUseProgram(s->id);
+}
+
+void shader_set_int(const shader *s, const char *name, const GLint value) {
+    glUseProgram(s->id);
+    glUniform1i(glGetUniformLocation(s->id, name), value);
 }
 
 void shader_destroy(shader *s) {

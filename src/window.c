@@ -10,9 +10,8 @@ void window_hint(const int major, const int minor, const int profile)
     glfwWindowHint(GLFW_OPENGL_PROFILE, profile);
 }
 
-void window_destroy(const window *w)
+void window_destroy(void)
 {
-    (void)w;
     glfwTerminate();
 }
 
@@ -42,6 +41,7 @@ window_result window_open(window *w)
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
         glfwTerminate();
+        w->handle = nullptr;
         return window_glad_error_init;
     }
 #pragma clang diagnostic pop

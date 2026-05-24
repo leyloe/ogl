@@ -2,25 +2,8 @@
 #include "render.h"
 #include "window.h"
 #include "mesh.h"
+#include "shaders.h"
 #include <stdio.h>
-
-static const char *vertex_shader_source = "#version 330 core\n"
-                                          "layout (location = 0) in vec3 aPos;\n"
-                                          "layout (location =1) in vec2 aTexCoord;\n"
-                                          "out vec2 textCoord;\n"
-                                          "void main()\n"
-                                          "{\n"
-                                          "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-                                          "   textCoord = aTexCoord;\n"
-                                          "}\0";
-static const char *fragment_shader_source = "#version 330 core\n"
-                                            "in vec2 textCoord;\n"
-                                            "uniform sampler2D texture0;\n"
-                                            "out vec4 FragColor;\n"
-                                            "void main()\n"
-                                            "{\n"
-                                            "   FragColor = texture(texture0, textCoord);\n"
-                                            "}\0";
 
 static GLfloat vertices[] = {
     -0.5F, 0.5F, 0.0F, // top left
@@ -106,11 +89,14 @@ int app_create(app *a, const int width, const int height, const char *title) {
     if (load_shader_or_report_error(a->renderer) != APP_SUCCESS) {
         return APP_ERROR;
     }
+    shader_set_int(&a->renderer->shader, "texture0", 0);
 
     a->mesh = mesh_create(vertices, sizeof(vertices), 3, indices, sizeof(indices));
-    mesh_add_attribute(&a->mesh, 1, tex_coords, sizeof(tex_coords), 2);
+    mesh_add_attribute(&a->mesh, UV_ATTRIBUTE_LOCATION, tex_coords, sizeof(tex_coords), 2);
+
+    texture_init();
     a->texture = texture_create();
-    if (load_texture_from_file("../textures/dirt.png", &a->texture) != APP_SUCCESS) {
+    if (load_texture_from_file("../textures/dirt.png", &a->texture) != texture_success) {
         return APP_ERROR;
     }
 
@@ -119,17 +105,21 @@ int app_create(app *a, const int width, const int height, const char *title) {
 
 void app_run(const app *a) {
     while (!window_should_close(&a->window)) {
+        render_clear();
         render_draw(a->renderer, &a->mesh, &a->texture);
         window_update(&a->window);
     }
 }
 
 void app_destroy(app *a) {
-    texture_destroy(&a->texture);
-    mesh_destroy(&a->mesh);
-    if (a->renderer) {
-        render_destroy(a->renderer);
-        a->renderer = nullptr;
+    if (a->window.handle != nullptr) {
+        texture_destroy(&a->texture);
+        mesh_destroy(&a->mesh);
+        if (a->renderer) {
+            render_destroy(a->renderer);
+            a->renderer = nullptr;
+        }
+        window_destroy();
     }
-    window_destroy(&a->window);
 }
+
