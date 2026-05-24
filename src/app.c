@@ -107,8 +107,9 @@ int app_create(app *a, const int width, const int height, const char *title) {
         return APP_ERROR;
     }
 
-    a->mesh = mesh_create(vertices, indices, sizeof(vertices), sizeof(indices), 3);
-    a->texture = texture_create(&a->mesh.vao, tex_coords, sizeof(tex_coords), 2);
+    a->mesh = mesh_create(vertices, sizeof(vertices), 3, indices, sizeof(indices));
+    mesh_add_attribute(&a->mesh, 1, tex_coords, sizeof(tex_coords), 2);
+    a->texture = texture_create();
     if (load_texture_from_file("../textures/dirt.png", &a->texture) != APP_SUCCESS) {
         return APP_ERROR;
     }
