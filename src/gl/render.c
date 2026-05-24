@@ -3,7 +3,7 @@
 
 #include "render.h"
 #include "shader.h"
-
+#include "texture.h"
 
 
 renderer *render_create(void)
@@ -33,9 +33,10 @@ const GLchar *render_get_shader_info_log(const renderer *r)
     return r->shader.info_log;
 }
 
-void render_draw(const renderer *r, const mesh *m)
+void render_draw(const renderer *r, const mesh *m, const texture *t)
 {
     shader_use(&r->shader);
+    texture_bind(t);
     mesh_draw(m);
 }
 

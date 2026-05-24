@@ -4,42 +4,36 @@
 #include "mesh.h"
 #include <stdio.h>
 
-// static const char *vertex_shader_source = "#version 330 core\n"
-//                                           "layout (location = 0) in vec3 aPos;\n"
-//                                           "layout (location =1) in vec2 aTexCoord;\n"
-//                                           "out vec2 textCoord;\n"
-//                                           "void main()\n"
-//                                           "{\n"
-//                                           "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-//                                           "   textCoord = aTexCoord;\n"
-//                                           "}\0";
-// static const char *fragment_shader_source = "#version 330 core\n"
-//                                             "in vec2 textCoord;\n"
-//                                             "uniform sampler2D texture0;\n"
-//                                             "out vec4 FragColor;\n"
-//                                             "void main()\n"
-//                                             "{\n"
-//                                             "   FragColor = texture(texture0, textCoord);\n"
-//                                             "}\0";
-
 static const char *vertex_shader_source = "#version 330 core\n"
                                           "layout (location = 0) in vec3 aPos;\n"
+                                          "layout (location =1) in vec2 aTexCoord;\n"
+                                          "out vec2 textCoord;\n"
                                           "void main()\n"
                                           "{\n"
                                           "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+                                          "   textCoord = aTexCoord;\n"
                                           "}\0";
 static const char *fragment_shader_source = "#version 330 core\n"
+                                            "in vec2 textCoord;\n"
+                                            "uniform sampler2D texture0;\n"
                                             "out vec4 FragColor;\n"
                                             "void main()\n"
                                             "{\n"
-                                            "   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-                                            "}\n\0";
+                                            "   FragColor = texture(texture0, textCoord);\n"
+                                            "}\0";
 
-static float vertices[] = {
+static GLfloat vertices[] = {
     -0.5F, 0.5F, 0.0F, // top left
     0.5F, 0.5F, 0.0F, // top right
     0.5F,  -0.5F, 0.0F, // bottom right
     -0.5F,  -0.5F,  0.0F  // bottom left
+};
+
+static GLfloat tex_coords[] = {
+    0.0F, 1.0F,
+    1.0F, 1.0F,
+    1.0F, 0.0F,
+    0.0F, 0.0F,
 };
 
 static const unsigned int indices[] = {
@@ -97,6 +91,7 @@ int app_create(app *a, const int width, const int height, const char *title) {
     a->window = window_create(width, height, title);
     a->renderer = nullptr;
     a->mesh = (mesh){0};
+    a->texture = (texture){0};
 
     if (create_window_or_report_error(&a->window) != APP_SUCCESS) {
         return APP_ERROR;
@@ -113,18 +108,23 @@ int app_create(app *a, const int width, const int height, const char *title) {
     }
 
     a->mesh = mesh_create(vertices, indices, sizeof(vertices), sizeof(indices), 3);
+    a->texture = texture_create(&a->mesh.vao, tex_coords, sizeof(tex_coords), 2);
+    if (load_texture_from_file("../textures/dirt.png", &a->texture) != APP_SUCCESS) {
+        return APP_ERROR;
+    }
 
     return APP_SUCCESS;
 }
 
 void app_run(const app *a) {
     while (!window_should_close(&a->window)) {
-        render_draw(a->renderer, &a->mesh);
+        render_draw(a->renderer, &a->mesh, &a->texture);
         window_update(&a->window);
     }
 }
 
 void app_destroy(app *a) {
+    texture_destroy(&a->texture);
     mesh_destroy(&a->mesh);
     if (a->renderer) {
         render_destroy(a->renderer);

@@ -5,6 +5,7 @@
 
 #include "mesh.h"
 #include "shader.h"
+#include "texture.h"
 
 typedef enum {
     render_success = 0,
@@ -20,7 +21,7 @@ typedef struct renderer {
 renderer *render_create(void);
 render_result render_load_shader(renderer *r, const char *vs_src, const char *fs_src);
 const GLchar *render_get_shader_info_log(const renderer *r);
-void render_draw(const renderer *r, const mesh *m);
+void render_draw(const renderer *r, const mesh *m, const texture *t);
 void render_destroy(renderer *r);
 
 #endif

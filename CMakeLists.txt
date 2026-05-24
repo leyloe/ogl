@@ -15,7 +15,7 @@ add_executable(${PROJECT_NAME} ${SRC_FILES})
 target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE include)
 target_include_directories(${PROJECT_NAME} PRIVATE src src/gl)
 target_compile_options(${PROJECT_NAME} PRIVATE -Weverything -Wno-pre-c23-compat -Wno-c++98-compat)
-set_source_files_properties(src/gl/glad.c PROPERTIES COMPILE_OPTIONS "-w;-fno-sanitize=all")
+set_source_files_properties(src/gl/glad.c src/gl/stb_image.c PROPERTIES COMPILE_OPTIONS "-w;-fno-sanitize=all")
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     set(SANITIZERS address,undefined,integer,nullability,implicit-conversion,local-bounds)
