@@ -89,7 +89,7 @@ int app_create(app *a, const int width, const int height, const char *title) {
     if (load_shader_or_report_error(a->renderer) != APP_SUCCESS) {
         return APP_ERROR;
     }
-    shader_set_int(&a->renderer->shader, "texture0", 0);
+    shader_set_int(&a->renderer->shader,"texture0", 0);
 
     a->mesh = mesh_create(vertices, sizeof(vertices), 3, indices, sizeof(indices));
     mesh_add_attribute(&a->mesh, UV_ATTRIBUTE_LOCATION, tex_coords, sizeof(tex_coords), 2);
@@ -104,8 +104,11 @@ int app_create(app *a, const int width, const int height, const char *title) {
 }
 
 void app_run(const app *a) {
+    GLfloat y_rot = 0.0F;
+
     while (!window_should_close(&a->window)) {
         mat4 model, view, proj;
+        y_rot += 0.1F;
 
         render_clear();
 
@@ -113,7 +116,9 @@ void app_run(const app *a) {
         glm_mat4_identity(view);
         glm_perspective(glm_rad(60.0F), (GLfloat)a->window.width / (GLfloat)a->window.height, 0.1F, 100.0F, proj);
 
-        glm_translate_make(model, (vec3){0.0F, 0.0F, -1.0F});
+        glm_translate_make(model, (vec3){0.0F, 0.0F, -3.0F});
+        glm_rotate(model, glm_rad(y_rot), (vec3){0.0F, 1.0F, 0.0F});
+
 
         shader_set_m4(&a->renderer->shader, "model", model);
         shader_set_m4(&a->renderer->shader, "view", view);

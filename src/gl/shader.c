@@ -69,13 +69,11 @@ void shader_use(const shader *s) {
 }
 
 void shader_set_int(const shader *s, const char *name, const GLint value) {
-    glUseProgram(s->id);
     glUniform1i(glGetUniformLocation(s->id, name), value);
 }
 
 void shader_set_m4(const shader *s, const char *name, const mat4 value) {
     const GLint loc = glGetUniformLocation(s->id, name);
-    glUseProgram(s->id);
     glUniformMatrix4fv(loc, 1, GL_FALSE, (const GLfloat *)value);
 }
 
