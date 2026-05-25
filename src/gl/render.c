@@ -1,4 +1,3 @@
-#include <stdlib.h>
 #include <glad/glad.h>
 
 #include "render.h"
@@ -42,7 +41,11 @@ void render_draw(const renderer *r, const mesh *m, const texture *t)
 
 void render_clear()
 {
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+void render_enable_depth_test() {
+    glEnable(GL_DEPTH_TEST);
 }
 
 void render_destroy(renderer *r)

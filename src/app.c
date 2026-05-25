@@ -6,10 +6,36 @@
 #include <stdio.h>
 
 static GLfloat vertices[] = {
-    -0.5F, 0.5F, 0.0F, // top left
-    0.5F, 0.5F, 0.0F, // top right
-    0.5F,  -0.5F, 0.0F, // bottom right
-    -0.5F,  -0.5F,  0.0F  // bottom left
+    // front face
+    -0.5F, 0.5F, 0.5F, // top left
+    0.5F, 0.5F, 0.5F, // top right
+    0.5F, -0.5F, 0.5F, // bottom right
+    -0.5F, -0.5F, 0.5F, // bottom left
+    // right face
+    0.5F, 0.5F, 0.5F, // top left
+    0.5F, 0.5F, -0.5F, // top right
+    0.5F, -0.5F, -0.5F, // bottom right
+    0.5F, -0.5F, 0.5F, // bottom left
+    // back face
+    0.5F, 0.5F, -0.5F, // top left
+    -0.5F, 0.5F, -0.5F, // top right
+    -0.5F, -0.5F, -0.5F, // bottom right
+    0.5F, -0.5F, -0.5F, // bottom left
+    // left face
+    -0.5F, 0.5F, -0.5F, // top left
+    -0.5F, 0.5F, 0.5F, // top right
+    -0.5F, -0.5F, 0.5F, // bottom right
+    -0.5F, -0.5F, -0.5F, // bottom left
+    // top face
+    -0.5F, 0.5F, -0.5F, // top left
+    0.5F, 0.5F, -0.5F, // top right
+    0.5F, 0.5F, 0.5F, // bottom right
+    -0.5F, 0.5F, 0.5F, // bottom left
+    // bottom face
+    -0.5F, -0.5F, 0.5F, // top left
+    0.5F, -0.5F, 0.5F, // top right
+    0.5F, -0.5F, -0.5F, // bottom right
+    -0.5F, -0.5F, -0.5F, // bottom left
 };
 
 static GLfloat tex_coords[] = {
@@ -17,13 +43,39 @@ static GLfloat tex_coords[] = {
     1.0F, 1.0F,
     1.0F, 0.0F,
     0.0F, 0.0F,
-};
 
+    0.0F, 1.0F,
+    1.0F, 1.0F,
+    1.0F, 0.0F,
+    0.0F, 0.0F,
+
+    0.0F, 1.0F,
+    1.0F, 1.0F,
+    1.0F, 0.0F,
+    0.0F, 0.0F,
+
+    0.0F, 1.0F,
+    1.0F, 1.0F,
+    1.0F, 0.0F,
+    0.0F, 0.0F,
+
+    0.0F, 1.0F,
+    1.0F, 1.0F,
+    1.0F, 0.0F,
+    0.0F, 0.0F,
+
+    0.0F, 1.0F,
+    1.0F, 1.0F,
+    1.0F, 0.0F,
+    0.0F, 0.0F,
+};
 static const unsigned int indices[] = {
-    // top triangle
-    0, 1, 2,
-    // bottom triangle
-    0, 2, 3
+    0,  1,  2,   0,  2,  3,    // front
+    4,  5,  6,   4,  6,  7,    // right
+    8,  9,  10,  8,  10, 11,   // back
+    12, 13, 14,  12, 14, 15,   // left
+    16, 17, 18,  16, 18, 19,   // top
+    20, 21, 22,  20, 22, 23,   // bottom
 };
 
 static void output_error(const char *message) {
@@ -99,6 +151,8 @@ int app_create(app *a, const int width, const int height, const char *title) {
     if (load_texture_from_file("../textures/dirt.png", &a->texture) != texture_success) {
         return APP_ERROR;
     }
+
+    render_enable_depth_test();
 
     return APP_SUCCESS;
 }

@@ -23,6 +23,7 @@ render_result render_load_shader(renderer *r, const char *vs_src, const char *fs
 const GLchar *render_get_shader_info_log(const renderer *r);
 void render_draw(const renderer *r, const mesh *m, const texture *t);
 void render_clear();
+void render_enable_depth_test();
 void render_destroy(renderer *r);
 
 #endif
