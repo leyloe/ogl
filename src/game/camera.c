@@ -10,6 +10,8 @@ camera camera_create(const window *window, const GLfloat speed, const GLfloat se
         .front = {0.0F, 0.0F, -1.0F},
         .right = {1.0F, 0.0F, 0.0F},
         .view_yaw = -90.0F,
+        .view_pitch = 0.0F,
+        .view_first_move = true,
     };
     return c;
 }
