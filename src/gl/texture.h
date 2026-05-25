@@ -12,9 +12,9 @@ typedef struct {
 } texture;
 
 void texture_init(void);
-texture texture_create(void);
+void texture_create(texture *t);
 void texture_destroy(texture *t);
-texture_result load_texture_from_file(const char *path);
+texture_result load_texture_from_file(texture *t, const char *path);
 void texture_bind(const texture *t);
 void texture_unbind(void);
 
