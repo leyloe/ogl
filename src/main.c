@@ -1,7 +1,7 @@
 #include "app.h"
 
-#define WINDOW_WIDTH 600
-#define WINDOW_HEIGHT 600
+#define WINDOW_WIDTH 1920
+#define WINDOW_HEIGHT 1080
 
 int main(void) {
     app a;
@@ -9,8 +9,10 @@ int main(void) {
 
     if (app_create(&a, WINDOW_WIDTH, WINDOW_HEIGHT, "APP") != APP_SUCCESS) {
         exit_code = -1;
-    } else {
-        app_run(&a);
+    }
+
+    if (app_run(&a) != APP_SUCCESS) {
+        exit_code = -1;
     }
 
     app_destroy(&a);

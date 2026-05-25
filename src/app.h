@@ -12,12 +12,10 @@
 typedef struct {
     window window;
     renderer *renderer;
-    mesh mesh;
-    texture texture;
 } app;
 
 int app_create(app *a, int width, int height, const char *title);
-void app_run(const app *a);
+int app_run(const app *a);
 void app_destroy(app *a);
 
 #endif

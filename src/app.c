@@ -1,8 +1,10 @@
 #include "app.h"
-#include "render.h"
+#include "gl/render.h"
 #include "window.h"
-#include "mesh.h"
+#include "gl/mesh.h"
 #include "shaders.h"
+#include "game/camera.h"
+#include "game/fame_time.h"
 #include <stdio.h>
 
 static GLfloat vertices[] = {
@@ -125,8 +127,6 @@ static int load_shader_or_report_error(renderer *r) {
 int app_create(app *a, const int width, const int height, const char *title) {
     a->window = window_create(width, height, title);
     a->renderer = nullptr;
-    a->mesh = (mesh){0};
-    a->texture = (texture){0};
 
     if (create_window_or_report_error(&a->window) != APP_SUCCESS) {
         return APP_ERROR;
@@ -143,52 +143,58 @@ int app_create(app *a, const int width, const int height, const char *title) {
     }
     shader_set_int(&a->renderer->shader,"texture0", 0);
 
-    a->mesh = mesh_create(vertices, sizeof(vertices), 3, indices, sizeof(indices));
-    mesh_add_attribute(&a->mesh, UV_ATTRIBUTE_LOCATION, tex_coords, sizeof(tex_coords), 2);
-
     texture_init();
-    a->texture = texture_create();
-    if (load_texture_from_file("../textures/dirt.png", &a->texture) != texture_success) {
-        return APP_ERROR;
-    }
 
     render_enable_depth_test();
 
     return APP_SUCCESS;
 }
 
-void app_run(const app *a) {
-    GLfloat y_rot = 0.0F;
+int app_run(const app *a) {
+    mesh mesh = {0};
+    texture texture = {0};
+
+    frame_time frame_time;
+    camera cam;
+
+    mesh = mesh_create(vertices, sizeof(vertices), 3, indices, sizeof(indices));
+    mesh_add_attribute(&mesh, UV_ATTRIBUTE_LOCATION, tex_coords, sizeof(tex_coords), 2);
+
+    texture = texture_create();
+    if (load_texture_from_file("../textures/dirt.png", &texture) != texture_success) {
+        return APP_ERROR;
+    }
+
+    cam = camera_create(&a->window, 5.0F, 1.0F, 0.0F, 0.0F, 0.0F);
+    frame_time = frame_time_init();
 
     while (!window_should_close(&a->window)) {
         mat4 model, view, proj;
-        y_rot += 0.05F;
 
+        frame_time_get(&frame_time);
+        camera_update(&cam, frame_time.dt);
         render_clear();
 
         glm_mat4_identity(model);
-        glm_mat4_identity(view);
-        glm_perspective(glm_rad(60.0F), (GLfloat)a->window.width / (GLfloat)a->window.height, 0.1F, 100.0F, proj);
-
-        glm_translate_make(model, (vec3){0.0F, 0.0F, -3.0F});
-        glm_rotate(model, glm_rad(y_rot), GLM_YUP);
-        glm_rotate(model, glm_rad(y_rot), GLM_XUP);
-        glm_rotate(model, glm_rad(y_rot), GLM_ZUP);
-
+        camera_get_view_matrix(&cam, view);
+        camera_get_projection_matrix(&cam, proj);
 
         shader_set_m4(&a->renderer->shader, "model", model);
         shader_set_m4(&a->renderer->shader, "view", view);
         shader_set_m4(&a->renderer->shader, "proj", proj);
 
-        render_draw(a->renderer, &a->mesh, &a->texture);
+        render_draw(a->renderer, &mesh, &texture);
         window_update(&a->window);
     }
+
+    texture_destroy(&texture);
+    mesh_destroy(&mesh);
+
+    return APP_SUCCESS;
 }
 
 void app_destroy(app *a) {
     if (a->window.handle != nullptr) {
-        texture_destroy(&a->texture);
-        mesh_destroy(&a->mesh);
         if (a->renderer) {
             render_destroy(a->renderer);
             a->renderer = nullptr;
