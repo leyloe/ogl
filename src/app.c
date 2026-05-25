@@ -165,7 +165,9 @@ int app_run(const app *a) {
         return APP_ERROR;
     }
 
-    cam = camera_create(&a->window, 5.0F, 1.0F, 0.0F, 0.0F, 0.0F);
+    cam = camera_create(&a->window, 5.0F, 0.1F, 0.0F, 0.0F, 0.0F);
+    glfwSetInputMode(a->window.handle, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
     frame_time = frame_time_init();
 
     while (!window_should_close(&a->window)) {

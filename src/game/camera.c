@@ -9,7 +9,7 @@ camera camera_create(const window *window, const GLfloat speed, const GLfloat se
         .up = {0.0F, 1.0F, 0.0F},
         .front = {0.0F, 0.0F, -1.0F},
         .right = {1.0F, 0.0F, 0.0F},
-        .yaw = -90.0F,
+        .view_yaw = -90.0F,
     };
     return c;
 }
@@ -24,10 +24,29 @@ void camera_get_view_matrix(camera *c, mat4 dest) {
     glm_lookat(c->position, center, c->up, dest);
 }
 
+void camera_update_vectors(camera *c) {
+    if (c->view_pitch >  89.0F) c->view_pitch =  89.0F;
+    if (c->view_pitch < -89.0F) c->view_pitch = -89.0F;
+
+    float yaw_r = glm_rad(c->view_yaw);
+    float pitch_r = glm_rad(c->view_pitch);
+    float cp = cosf(pitch_r);
+
+    c->front[0] = cp * cosf(yaw_r);
+    c->front[1] = sinf(pitch_r);
+    c->front[2] = cp * sinf(yaw_r);
+    glm_vec3_normalize(c->front);
+
+    glm_vec3_crossn(c->front, GLM_YUP, c->right);
+    glm_vec3_crossn(c->right, c->front, c->up);
+}
+
 void camera_input_controller(camera *c, const GLfloat dt) {
     GLFWwindow *win = c->window->handle;
-    float v = c->speed * dt;
+    const float v = c->speed * dt;
+    double mouse_x, mouse_y;
 
+    glfwGetCursorPos(win, &mouse_x, &mouse_y);
 
     if (glfwGetKey(win, GLFW_KEY_W) == GLFW_PRESS)
         glm_vec3_muladds(c->front,  v, c->position);
@@ -42,6 +61,21 @@ void camera_input_controller(camera *c, const GLfloat dt) {
         c->position[1] += v;
     if (glfwGetKey(win, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
         c->position[1] -= v;
+
+    if (c->view_first_move) {
+        c->view_last_position[0] = (GLfloat)mouse_x;
+        c->view_last_position[1] = (GLfloat)mouse_y;
+        c->view_first_move = false;
+    } else {
+        const GLfloat dx = (GLfloat)mouse_x - c->view_last_position[0];
+        const GLfloat dy = (GLfloat)mouse_y - c->view_last_position[1];
+        c->view_last_position[0] = (GLfloat)mouse_x;
+        c->view_last_position[1] = (GLfloat)mouse_y;
+
+        c->view_yaw   += dx * c->sensitivity;
+        c->view_pitch -= dy * c->sensitivity;
+    }
+    camera_update_vectors(c);
 }
 
 void camera_update(camera *c, const GLfloat dt) {

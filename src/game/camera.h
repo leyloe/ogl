@@ -16,14 +16,17 @@ typedef struct {
     vec3 up; // UnitY
     vec3 front; // UnitZ
     vec3 right; // UnitX
-    GLfloat pitch;
-    GLfloat yaw;
+    GLfloat view_pitch;
+    GLfloat view_yaw;
+    bool view_first_move;
+    vec2 view_last_position;
 } camera;
 
 camera camera_create(const window *window, GLfloat speed, GLfloat sensitivity, GLfloat pos_x, GLfloat pos_y, GLfloat pos_z);
 void camera_get_view_matrix(camera *c, mat4 dest);
 void camera_get_projection_matrix(const camera *c, mat4 dest);
 void camera_input_controller(camera *c, GLfloat dt);
+void camera_update_vectors(camera *c);
 void camera_update(camera *c, GLfloat dt);
 
 #endif
