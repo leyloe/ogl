@@ -24,9 +24,16 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 endif()
 
 include(FetchContent)
+
 FetchContent_Declare(glfw URL https://github.com/glfw/glfw/archive/refs/tags/3.4.tar.gz)
 FetchContent_MakeAvailable(glfw)
 set_target_properties(glfw PROPERTIES SYSTEM TRUE)
 
+FetchContent_Declare(cglm URL https://github.com/recp/cglm/archive/refs/tags/v0.9.6.tar.gz)
+FetchContent_MakeAvailable(cglm)
+set_target_properties(cglm PROPERTIES SYSTEM TRUE)
+
 target_link_libraries(${PROJECT_NAME} PRIVATE glfw)
 target_compile_definitions(${PROJECT_NAME} PRIVATE GLFW_INCLUDE_NONE)
+
+target_link_libraries(${PROJECT_NAME} PRIVATE cglm)

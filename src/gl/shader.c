@@ -73,6 +73,12 @@ void shader_set_int(const shader *s, const char *name, const GLint value) {
     glUniform1i(glGetUniformLocation(s->id, name), value);
 }
 
+void shader_set_m4(const shader *s, const char *name, const mat4 value) {
+    const GLint loc = glGetUniformLocation(s->id, name);
+    glUseProgram(s->id);
+    glUniformMatrix4fv(loc, 1, GL_FALSE, (const GLfloat *)value);
+}
+
 void shader_destroy(shader *s) {
     glDeleteProgram(s->id);
     s->id = 0;

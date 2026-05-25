@@ -105,7 +105,20 @@ int app_create(app *a, const int width, const int height, const char *title) {
 
 void app_run(const app *a) {
     while (!window_should_close(&a->window)) {
+        mat4 model, view, proj;
+
         render_clear();
+
+        glm_mat4_identity(model);
+        glm_mat4_identity(view);
+        glm_perspective(glm_rad(60.0F), (GLfloat)a->window.width / (GLfloat)a->window.height, 0.1F, 100.0F, proj);
+
+        glm_translate_make(model, (vec3){0.0F, 0.0F, -1.0F});
+
+        shader_set_m4(&a->renderer->shader, "model", model);
+        shader_set_m4(&a->renderer->shader, "view", view);
+        shader_set_m4(&a->renderer->shader, "proj", proj);
+
         render_draw(a->renderer, &a->mesh, &a->texture);
         window_update(&a->window);
     }

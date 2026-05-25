@@ -2,6 +2,7 @@
 #define SHADER_H
 
 #include <glad/glad.h>
+#include <cglm/cglm.h>
 
 typedef enum {
     shader_success = 0,
@@ -18,6 +19,7 @@ typedef struct shader {
 shader_result shader_create_program_vf(shader *s, const GLchar *vertex_source, const GLchar *fragment_source);
 void shader_use(const shader *s);
 void shader_set_int(const shader *s, const char *name, GLint value);
+void shader_set_m4(const shader *s, const char *name, const mat4 value);
 void shader_destroy(shader *s);
 
 #endif
