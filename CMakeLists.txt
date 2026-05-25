@@ -13,7 +13,7 @@ file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS "src/*.c")
 add_executable(${PROJECT_NAME} ${SRC_FILES})
 
 target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE include)
-target_include_directories(${PROJECT_NAME} PRIVATE src src/gl)
+target_include_directories(${PROJECT_NAME} PRIVATE src src/gl src/game)
 target_compile_options(${PROJECT_NAME} PRIVATE -Weverything -Wno-pre-c23-compat -Wno-c++98-compat)
 set_source_files_properties(src/gl/glad.c src/gl/stb_image.c PROPERTIES COMPILE_OPTIONS "-w;-fno-sanitize=all")
 

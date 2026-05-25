@@ -162,7 +162,7 @@ void app_run(const app *a) {
 
     while (!window_should_close(&a->window)) {
         mat4 model, view, proj;
-        y_rot += 0.1F;
+        y_rot += 0.05F;
 
         render_clear();
 
@@ -171,7 +171,9 @@ void app_run(const app *a) {
         glm_perspective(glm_rad(60.0F), (GLfloat)a->window.width / (GLfloat)a->window.height, 0.1F, 100.0F, proj);
 
         glm_translate_make(model, (vec3){0.0F, 0.0F, -3.0F});
-        glm_rotate(model, glm_rad(y_rot), (vec3){0.0F, 1.0F, 0.0F});
+        glm_rotate(model, glm_rad(y_rot), GLM_YUP);
+        glm_rotate(model, glm_rad(y_rot), GLM_XUP);
+        glm_rotate(model, glm_rad(y_rot), GLM_ZUP);
 
 
         shader_set_m4(&a->renderer->shader, "model", model);
