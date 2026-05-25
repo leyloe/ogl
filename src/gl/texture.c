@@ -21,7 +21,7 @@ texture texture_create(void) {
     return t;
 }
 
-texture_result load_texture_from_file(const char *path, const texture *t) {
+texture_result load_texture_from_file(const char *path) {
     int w, h, channels;
     unsigned char *data = stbi_load(path, &w, &h, &channels, STBI_rgb_alpha);
 
@@ -29,7 +29,6 @@ texture_result load_texture_from_file(const char *path, const texture *t) {
         return texture_error_load;
     }
 
-    glBindTexture(GL_TEXTURE_2D, t->id);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
     glGenerateMipmap(GL_TEXTURE_2D);
     stbi_image_free(data);

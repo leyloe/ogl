@@ -161,7 +161,7 @@ int app_run(const app *a) {
     mesh_add_attribute(&mesh, UV_ATTRIBUTE_LOCATION, tex_coords, sizeof(tex_coords), 2);
 
     texture = texture_create();
-    if (load_texture_from_file("../textures/dirt.png", &texture) != texture_success) {
+    if (load_texture_from_file("../textures/dirt.png") != texture_success) {
         return APP_ERROR;
     }
 
