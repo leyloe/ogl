@@ -25,12 +25,9 @@ void camera_get_view_matrix(camera *c, mat4 dest) {
 }
 
 void camera_update_vectors(camera *c) {
-    if (c->view_pitch >  89.0F) c->view_pitch =  89.0F;
-    if (c->view_pitch < -89.0F) c->view_pitch = -89.0F;
-
-    float yaw_r = glm_rad(c->view_yaw);
-    float pitch_r = glm_rad(c->view_pitch);
-    float cp = cosf(pitch_r);
+    const float yaw_r = glm_rad(c->view_yaw);
+    const float pitch_r = glm_rad(c->view_pitch);
+    const float cp = cosf(pitch_r);
 
     c->front[0] = cp * cosf(yaw_r);
     c->front[1] = sinf(pitch_r);
@@ -74,6 +71,7 @@ void camera_input_controller(camera *c, const GLfloat dt) {
 
         c->view_yaw   += dx * c->sensitivity;
         c->view_pitch -= dy * c->sensitivity;
+        c->view_pitch  = glm_clamp(c->view_pitch, -89.0F, 89.0F);
     }
     camera_update_vectors(c);
 }
