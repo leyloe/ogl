@@ -32,6 +32,7 @@ texture_result load_texture_from_file(const char *path) {
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
     glGenerateMipmap(GL_TEXTURE_2D);
     stbi_image_free(data);
+    texture_unbind();
 
     return texture_success;
 }
