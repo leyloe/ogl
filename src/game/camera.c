@@ -1,11 +1,10 @@
 #include <game/camera.h>
 
-camera camera_create(const window *window, const GLfloat speed, const GLfloat sensitivity, const GLfloat pos_x, const GLfloat pos_y, const GLfloat pos_z) {
+camera camera_create(const window *window, const GLfloat speed, const GLfloat sensitivity, vec3 position) {
     const camera c = {
         .window = window,
         .speed = speed,
         .sensitivity = sensitivity,
-        .position = {pos_x, pos_y, pos_z},
         .up = {0.0F, 1.0F, 0.0F},
         .front = {0.0F, 0.0F, -1.0F},
         .right = {1.0F, 0.0F, 0.0F},
@@ -13,6 +12,10 @@ camera camera_create(const window *window, const GLfloat speed, const GLfloat se
         .view_pitch = 0.0F,
         .view_first_move = true,
     };
+
+    glm_vec3_copy(position, c.position);
+
+
     return c;
 }
 

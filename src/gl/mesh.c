@@ -21,6 +21,25 @@ mesh mesh_create(const float *positions, const GLsizeiptr positions_size, const 
     return m;
 }
 
+mesh mesh_create_interleaved(const float *positions, const GLsizeiptr positions_size, const unsigned int *indices, const GLsizeiptr index_size) {
+    mesh m = {0};
+    const GLsizei stride = 5 * (GLsizei)sizeof(float);
+
+    m.vao = vertex_array_create();
+    m.vbo_positions = vertex_buffer_create(positions, positions_size, GL_STATIC_DRAW);
+
+
+    // position -> location 0
+    vertex_array_create_attrib(0, 3, GL_FLOAT, GL_FALSE, stride, nullptr);
+    // texture coords -> location 1 (offset 3 floats into each vertex)
+    vertex_array_create_attrib(1, 2, GL_FLOAT, GL_FALSE, stride, (const void *)(3 * sizeof(float)));
+
+    m.ebo = element_buffer_create(indices, index_size, GL_STATIC_DRAW);
+    m.index_count = (GLsizei)(index_size / (GLsizeiptr)sizeof(unsigned int));
+
+    return m;
+}
+
 void mesh_add_attribute(mesh *m, const GLuint location, const float *data, const GLsizeiptr data_size, const GLint floats_per_element) {
     if (m->attribute_count >= MESH_MAX_ATTRIBUTES) return;
     vertex_array_bind(&m->vao);

@@ -22,7 +22,7 @@ typedef struct {
     vec2 view_last_position;
 } camera;
 
-camera camera_create(const window *window, GLfloat speed, GLfloat sensitivity, GLfloat pos_x, GLfloat pos_y, GLfloat pos_z);
+camera camera_create(const window *window, GLfloat speed, GLfloat sensitivity, vec3 position);
 void camera_get_view_matrix(camera *c, mat4 dest);
 void camera_get_projection_matrix(const camera *c, mat4 dest);
 void camera_input_controller(camera *c, GLfloat dt);

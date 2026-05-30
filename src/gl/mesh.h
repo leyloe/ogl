@@ -20,6 +20,7 @@ typedef struct {
 
 mesh mesh_create(const float *positions, GLsizeiptr positions_size, GLint floats_per_position,
                  const unsigned int *indices, GLsizeiptr index_size);
+mesh mesh_create_interleaved(const float *positions, GLsizeiptr positions_size, const unsigned int *indices, GLsizeiptr index_size);
 void mesh_add_attribute(mesh *m, GLuint location, const float *data, GLsizeiptr data_size, GLint floats_per_element);
 void mesh_draw(const mesh *m);
 void mesh_destroy(mesh *m);
