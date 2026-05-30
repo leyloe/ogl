@@ -20,5 +20,7 @@ block block_create(vec3 pos) {
 }
 
 face_data block_get_face_data(const block *b, const faces f) {
+#pragma clang unsafe_buffer_usage begin
     return b->faces[f];
+#pragma clang unsafe_buffer_usage end
 }

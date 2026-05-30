@@ -20,9 +20,10 @@ typedef struct {
     GLfloat view_yaw;
     bool view_first_move;
     vec2 view_last_position;
+    GLfloat fov;
 } camera;
 
-camera camera_create(const window *window, GLfloat speed, GLfloat sensitivity, vec3 position);
+camera camera_create(const window *window, GLfloat speed, GLfloat sensitivity, vec3 position, GLfloat fov);
 void camera_get_view_matrix(camera *c, mat4 dest);
 void camera_get_projection_matrix(const camera *c, mat4 dest);
 void camera_input_controller(camera *c, GLfloat dt);

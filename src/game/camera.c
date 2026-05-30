@@ -1,6 +1,6 @@
 #include <game/camera.h>
 
-camera camera_create(const window *window, const GLfloat speed, const GLfloat sensitivity, vec3 position) {
+camera camera_create(const window *window, const GLfloat speed, const GLfloat sensitivity, vec3 position, GLfloat fov) {
     const camera c = {
         .window = window,
         .speed = speed,
@@ -10,6 +10,7 @@ camera camera_create(const window *window, const GLfloat speed, const GLfloat se
         .right = {1.0F, 0.0F, 0.0F},
         .view_yaw = -90.0F,
         .view_pitch = 0.0F,
+        .fov = fov,
         .view_first_move = true,
     };
 
@@ -20,7 +21,7 @@ camera camera_create(const window *window, const GLfloat speed, const GLfloat se
 }
 
 void camera_get_projection_matrix(const camera *c, mat4 dest) {
-    glm_perspective(glm_rad(45.0F), (GLfloat)c->window->width / (GLfloat)c->window->height, 0.1F, 100.0F, dest);
+    glm_perspective(glm_rad(c->fov), (GLfloat)c->window->width / (GLfloat)c->window->height, 0.1F, 100.0F, dest);
 }
 
 void camera_get_view_matrix(camera *c, mat4 dest) {
@@ -50,6 +51,17 @@ void camera_input_controller(camera *c, const GLfloat dt) {
 
     glfwGetCursorPos(win, &mouse_x, &mouse_y);
 
+    // FOV control
+    if (glfwGetKey(win, GLFW_KEY_X) == GLFW_PRESS)
+        c->fov += 100.0F * dt;
+    if (glfwGetKey(win, GLFW_KEY_C) == GLFW_PRESS)
+        c->fov -= 100.0F * dt;
+
+    // Supported FOV range: 10-170 degrees
+    if (c->fov < 10.0F) c->fov = 10.0F;
+    if (c->fov > 170.0F) c->fov = 170.0F;
+
+    // Position control
     if (glfwGetKey(win, GLFW_KEY_W) == GLFW_PRESS)
         glm_vec3_muladds(c->front,  v, c->position);
     if (glfwGetKey(win, GLFW_KEY_S) == GLFW_PRESS)
@@ -64,6 +76,7 @@ void camera_input_controller(camera *c, const GLfloat dt) {
     if (glfwGetKey(win, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
         c->position[1] -= v;
 
+    // View control
     if (c->view_first_move) {
         c->view_last_position[0] = (GLfloat)mouse_x;
         c->view_last_position[1] = (GLfloat)mouse_y;

@@ -1,7 +1,6 @@
 #ifndef BLOCK_H
 #define BLOCK_H
 #include "cglm/cglm.h"
-#include "glad/glad.h"
 
 #define VERTICES_PER_FACE 4
 
